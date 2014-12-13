@@ -190,8 +190,10 @@ $(document).ready(function(){
   });
   //listening for Enter in command line
   $('.commandLine').keypress(function(e){
-    if(e.keyCode==13)
+    if(e.keyCode==13){
       $('.commandExec').click();
+	  $('.commandLine').val('');
+	}
   });
   //listening for arrow keys in command line
   $('.commandLine').keydown(function(e){
