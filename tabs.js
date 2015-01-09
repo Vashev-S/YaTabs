@@ -2,7 +2,7 @@
 * Object for console-works with tabs
 * @property {array} viewHistory     - array of objects, stores the tabs view history.
 * @property {array} commandHistory  - array stores the called commands.
-* @property {unsigned int} point    - pointer to the display command from the commands history.
+* @property {unsigned int} point    - pointer to the last command from the commands history plus one.
 */
 var tabs = {
   viewHistory : [],
@@ -43,32 +43,33 @@ var tabs = {
   * @return {string} log message
   */
   swapTabs : function(swapTabs){
-    //check for valid params 
-    if ( !( swapTabs && swapTabs.length == 2) ){
-      return ('bad input params');
-    }
     var returnMessage = '';
     var firstTabName = swapTabs[0];
     var secondTabName = swapTabs[1];
     var isExistfirstTab = this.checkExistTab(firstTabName);
     var isExistsecondTab = this.checkExistTab(secondTabName);
+    var ContentsecondTabName, ContentsecondTabName, nameOfFirstTab, nameOfSecondTab;
+    //check for valid params 
+    if ( !( swapTabs && swapTabs.length == 2) ){
+      return ('bad input params');
+    }
     if ( isExistfirstTab && isExistsecondTab ){
       //get content of tabs
-      var ContentfirstTabName = $('.tab-content_'+firstTabName).html();
-      var ContentsecondTabName = $('.tab-content_'+secondTabName).html();
+      ContentfirstTabName = $('.tab-content_'+firstTabName).html();
+      ContentsecondTabName = $('.tab-content_'+secondTabName).html();
       //swap content
       $('.tab-content_'+firstTabName).html(ContentsecondTabName);
       $('.tab-content_'+secondTabName).html(ContentfirstTabName);
       //swap names
-      var nameOfFirstTab = $('li#'+firstTabName+'>a').text();
-      var nameOfSecondTab = $('li#'+secondTabName+'>a').text();
+      nameOfFirstTab = $('li#'+firstTabName+'>a').text();
+      nameOfSecondTab = $('li#'+secondTabName+'>a').text();
       $('li#'+firstTabName+'>a').text(nameOfSecondTab);
       $('li#'+secondTabName+'>a').text(nameOfFirstTab);
       //return log message
       returnMessage = 'swaped tabs "'+nameOfFirstTab+'" and "'+nameOfSecondTab+'"';
       return returnMessage;
     }else{
-      var returnMessage = 'tabs #'+(isExistfirstTab == 0 ? firstTabName : secondTabName)+' does not exist. ';
+      returnMessage = 'tabs #'+(isExistfirstTab == 0 ? firstTabName : secondTabName)+' does not exist. ';
       returnMessage += this.availableTabs();
       return returnMessage;
     }
@@ -121,14 +122,15 @@ var tabs = {
   * @return status message in $('.console-log')
   */
   logMessage : function(callFunction){
+    var message, consoleObj;
     //save command in history
     this.commandHistory.push(callFunction);
     //move point to last command
-    this.point = this.commandHistory.length-1;
-    var message = this.checkValid(callFunction);
+    this.point = this.commandHistory.length;
+    message = this.checkValid(callFunction);
     $('.console-log').append(message+'<br>/> ');
     //scroll log screen
-    var consoleObj = $('.console-log')[0];
+    consoleObj = $('.console-log')[0];
     consoleObj.scrollTop = consoleObj.scrollHeight;
   },
   /**
@@ -192,19 +194,21 @@ $(document).ready(function(){
   $('.commandLine').keypress(function(e){
     if(e.keyCode==13){
       $('.commandExec').click();
-	  $('.commandLine').val('');
-	}
+	   $('.commandLine').val('');
+	 };
   });
   //listening for arrow keys in command line
   $('.commandLine').keydown(function(e){
     if(e.keyCode==38){
-      if(tabs.point > 0)
+      if(tabs.point > 0){
         tabs.point--;
+      };
       $('.commandLine').val(tabs.commandHistory[tabs.point]);
     }
     if(e.keyCode==40){
-      if(tabs.point < tabs.commandHistory.length)
+      if(tabs.point < tabs.commandHistory.length){
         tabs.point++;
+      };
       $('.commandLine').val(tabs.commandHistory[tabs.point]);
     }
   });
