@@ -216,14 +216,14 @@ $(document).ready(function(){
   $('.console-head-control_hide').click(function(){
     var status = $('.console-log').css('display');
     if ( status!= 'none'){
-      $('.console-log').css('display','none');
-      $('.console').css('min-height','0px');
-      $('.console').css('height','10%');
+      $('.console-log').css('display', 'none');
+      $('.console').css('min-height', '0px');
+      $('.console').css('min-height', '40px');
     }
     else{
-      $('.console-log').css('display','block');
-      $('.console').css('min-height','300px');
-      $('.console').css('height','70%');
+      $('.console-log').css('display', 'block');
+      $('.console').css('min-height', '300px');
+      $('.console').css('height', '70%');
     }
   });
 });
